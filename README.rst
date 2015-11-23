@@ -11,6 +11,11 @@ python-sjsclient
   :target: https://coveralls.io/github/spark-jobserver/python-sjsclient?branch=master
 
 
+.. image:: https://readthedocs.org/projects/python-sjsclient/badge/?version=latest
+   :target: http://python-sjsclient.readthedocs.org/en/latest/?badge=latest
+   :alt: Documentation Status
+
+
 Features
 --------
 
