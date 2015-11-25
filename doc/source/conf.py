@@ -54,7 +54,8 @@ htmlhelp_basename = '%sdoc' % project
 latex_documents = [
     ('index',
      '%s.tex' % project,
-     u'%s Documentation' % project),
+     u'%s Documentation' % project,
+     u'Spark Jobserver Python Client', 'manual'),
 ]
 
 # Example configuration for intersphinx: refer to the Python standard library.
