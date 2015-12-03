@@ -49,7 +49,7 @@ Then call methods on its managers::
 Documentation
 -------------
 
-http://python-sjsclisnt.readthedocs.org
+http://python-sjsclient.readthedocs.org
 
 
 Discussion list
