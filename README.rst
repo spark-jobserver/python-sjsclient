@@ -13,7 +13,13 @@ Python client for Spark Jobserver
    :target: http://python-sjsclient.readthedocs.org/en/latest/?badge=latest
    :alt: Documentation Status
 
+.. image:: https://img.shields.io/pypi/v/python-sjsclient.svg
+        :target: https://pypi.python.org/pypi/python-sjsclient
+        :alt: Latest version
 
+.. image:: https://img.shields.io/pypi/pyversions/python-sjsclient.svg
+        :target: https://pypi.python.org/pypi/python-sjsclient
+        :alt: Supported Python versions
 Features
 --------
 
