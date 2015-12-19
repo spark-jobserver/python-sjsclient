@@ -1,5 +1,5 @@
-Reference
-=========
+Client API Reference
+====================
 
 .. toctree::
    :maxdepth: 2

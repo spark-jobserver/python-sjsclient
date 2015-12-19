@@ -26,6 +26,14 @@ Features
 - Supports Spark Jobserver 0.6.0+
 
 
+Library Installation
+--------------------
+
+::
+
+   $ pip install python-sjsclient
+
+
 Getting started
 ---------------
 

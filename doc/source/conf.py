@@ -3,6 +3,8 @@
 import os
 import sys
 
+import sphinx_rtd_theme
+
 sys.path.insert(0, os.path.abspath('../..'))
 # -- General configuration ----------------------------------------------------
 
@@ -10,7 +12,10 @@ sys.path.insert(0, os.path.abspath('../..'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = [
     'sphinx.ext.autodoc',
-    #'sphinx.ext.intersphinx',
+    'sphinx.ext.viewcode',
+    'sphinxcontrib.spelling',
+    'sphinxcontrib.newsfeed',
+    'sphinx.ext.autodoc'
 ]
 
 # autodoc generation is a bit aggressive and a nuisance when doing heavy
@@ -41,9 +46,15 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-# html_theme_path = ["."]
-# html_theme = '_theme'
+html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'sphinx_rtd_theme'
 # html_static_path = ['static']
+
+html_sidebars = {
+    '**': [
+        'about.html', 'navigation.html', 'searchbox.html',
+    ]
+}
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = '%sdoc' % project
