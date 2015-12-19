@@ -13,7 +13,6 @@ sys.path.insert(0, os.path.abspath('../..'))
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
-    'sphinxcontrib.spelling',
     'sphinxcontrib.newsfeed',
     'sphinx.ext.autodoc'
 ]
