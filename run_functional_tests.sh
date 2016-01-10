@@ -29,9 +29,7 @@ fi
 
 python setup.py install
 
-# Delete all active context from spark job server before running tests.
-python -c "from sjsclient.tests.functional import base; base.delete_all_contexts()"
-
-python -c "from sjsclient.tests.functional import base; base.create_functional_context()"
+# Setup test bed
+python -c "from sjsclient.tests.functional import base; base.bootstrap_testbed()"
 
 python setup.py testr $@

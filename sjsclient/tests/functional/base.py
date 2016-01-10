@@ -65,3 +65,8 @@ def delete_all_contexts(sleep=10):
         except exceptions.NotFoundException:
             pass
     time.sleep(sleep)
+
+
+def bootstrap_testbed():
+    delete_all_contexts()
+    create_functional_context()
