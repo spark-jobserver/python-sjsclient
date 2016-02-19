@@ -11,9 +11,9 @@ class ResourceManager(object):
     def __init__(self, client):
         self.client = client
 
-    def list(self):
+    def list(self, params=None):
         url = self.base_path
-        resp = self.client._get(url).json()
+        resp = self.client._get(url, params=params).json()
         for data in resp:
             yield self._create_resource(data)
 
@@ -63,6 +63,12 @@ class Resource(collections.MutableMapping):
 
             for key, value in kwargs.items():
                 setattr(self, key, value)
+
+    @property
+    def attrs(self):
+        print "I am here"
+        print self._attrs
+        return self._attrs
 
     def delete(self):
         return self.manager.delete()
