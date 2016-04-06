@@ -66,8 +66,6 @@ class Resource(collections.MutableMapping):
 
     @property
     def attrs(self):
-        print "I am here"
-        print self._attrs
         return self._attrs
 
     def delete(self):

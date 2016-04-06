@@ -7,7 +7,7 @@ from sjsclient import client
 
 def get_demeter_config():
     json_config = """
-    {"spark_jobserver": { "host": "10.29.23.165", "port": 8090 } }
+    {"spark_jobserver": { "host": "10.29.23.172", "port": 8090 } }
     """
     return json.loads(json_config)
 
