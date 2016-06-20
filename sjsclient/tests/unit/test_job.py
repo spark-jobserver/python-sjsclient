@@ -11,7 +11,9 @@ from sjsclient import utils
 job_id = "65efab5c-8b75-4454-a42c-882ff4c48786"
 start_time = "2015-04-13T12:25:57.691+05:30"
 duration = "10.68 secs"
-status = "STARTED"
+started = "STARTED"
+finished = "FINISHED"
+running = "RUNNING"
 context = "test-context"
 class_path = "test.class.path"
 
@@ -23,7 +25,7 @@ job_create_response = """
     "context": "%s"
   }
 }
-""" % (status, job_id, context)
+""" % (started, job_id, context)
 
 job_get_result_response = """
 {
@@ -35,7 +37,7 @@ job_get_result_response = """
   "jobId": "%s",
   "result": [1, 2, 3]
 }
-""" % (duration, class_path, start_time, context, status, job_id)
+""" % (duration, class_path, start_time, context, finished, job_id)
 
 job_get_status_not_found_response = """
 {
@@ -53,7 +55,7 @@ job_status_response = """
   "status": "%s",
   "jobId": "%s"
 }
-""" % (duration, class_path, start_time, context, status, job_id)
+""" % (duration, class_path, start_time, context, running, job_id)
 
 job_list_response = """
 [{
@@ -64,7 +66,7 @@ job_list_response = """
   "status": "%s",
   "jobId": "%s"
 }]
-""" % (duration, class_path, start_time, context, status, job_id)
+""" % (duration, class_path, start_time, context, running, job_id)
 
 job_delete_response = """
 {
@@ -90,7 +92,7 @@ class TestJob(base.BaseTestCase):
         super(TestJob, self).setUp()
         self.client = client.Client(self.TEST_ENDPOINT)
 
-    def assertJobFields(self, test_job):
+    def assertJobFields(self, test_job, status):
         self.assertEqual(job_repr, repr(test_job))
         self.assertIsInstance(test_job, job.Job)
         self.assertEqual(duration, test_job.duration)
@@ -112,7 +114,7 @@ class TestJob(base.BaseTestCase):
         mock_req.get(list_url, text=job_list_response)
         job_list = self.client.jobs.list()
         test_job = next(job_list)
-        self.assertJobFields(test_job)
+        self.assertJobFields(test_job, running)
 
     @requests_mock.Mocker()
     def test_create(self, mock_req):
@@ -121,19 +123,20 @@ class TestJob(base.BaseTestCase):
         query = "?classPath=test.class.path&appName=test_app"
         post_url = "{}{}".format(post_url, query)
 
-        get_url = utils.urljoin(self.TEST_ENDPOINT,
-                                self.client.jobs.base_path,
-                                job_id)
-
         mock_req.post(post_url, text=job_create_response)
-        mock_req.get(get_url, text=job_get_result_response)
 
         test_job = self.client.jobs.create(FakeApp, "test.class.path")
         self.assertEqual(context, test_job.context)
-        self.assertEqual(status, test_job.status)
+        self.assertEqual(started, test_job.status)
         self.assertEqual(job_id, test_job.jobId)
-        self.assertEqual("STARTED", test_job.status)
-        self.assertEqual([1, 2, 3], test_job.result)
+
+        get_url = utils.urljoin(self.TEST_ENDPOINT,
+                                self.client.jobs.base_path,
+                                job_id)
+        mock_req.get(get_url, text=job_get_result_response)
+        test_job_result = self.client.jobs.get(test_job.jobId)
+        self.assertEqual(finished, test_job_result.status)
+        self.assertEqual([1, 2, 3], test_job_result.result)
 
     @requests_mock.Mocker()
     def test_create_with_ctx(self, mock_req):
@@ -143,20 +146,22 @@ class TestJob(base.BaseTestCase):
                  "context=test-context")
         post_url = "{}{}".format(post_url, query)
 
-        get_url = utils.urljoin(self.TEST_ENDPOINT,
-                                self.client.jobs.base_path,
-                                job_id)
-
         mock_req.post(post_url, text=job_create_response)
-        mock_req.get(get_url, text=job_get_result_response)
 
         test_job = self.client.jobs.create(FakeApp, "test.class.path",
                                            ctx=FakeContext)
         self.assertEqual(context, test_job.context)
-        self.assertEqual(status, test_job.status)
+        self.assertEqual(started, test_job.status)
         self.assertEqual(job_id, test_job.jobId)
-        self.assertEqual("STARTED", test_job.status)
-        self.assertEqual([1, 2, 3], test_job.result)
+
+        get_url = utils.urljoin(self.TEST_ENDPOINT,
+                                self.client.jobs.base_path,
+                                job_id)
+
+        mock_req.get(get_url, text=job_get_result_response)
+        test_job_result = self.client.jobs.get(test_job.jobId)
+        self.assertEqual(finished, test_job_result.status)
+        self.assertEqual([1, 2, 3], test_job_result.result)
 
     @requests_mock.Mocker()
     def test_get(self, mock_req):
@@ -169,7 +174,7 @@ class TestJob(base.BaseTestCase):
         mock_req.get(get_url, text=job_get_result_response)
         mock_req.get(status_url, text=job_status_response)
         test_job = self.client.jobs.get(job_id)
-        self.assertJobFields(test_job)
+        self.assertJobFields(test_job, running)
 
     @requests_mock.Mocker()
     def test_get_after_sjs_restart(self, mock_req):
@@ -182,7 +187,7 @@ class TestJob(base.BaseTestCase):
         mock_req.get(get_url, status_code=404)
         mock_req.get(status_url, text=job_status_response)
         test_job = self.client.jobs.get(job_id)
-        self.assertJobFields(test_job)
+        self.assertJobFields(test_job, running)
 
     @requests_mock.Mocker()
     def test_get_non_existing(self, mock_req):

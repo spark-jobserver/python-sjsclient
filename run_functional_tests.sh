@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export TESTSJS_SPARKJOB_SERVER_URL=${DEMETER_SPARKJOB_SERVER_URL:-http://localhost:8090}
+export TESTSJS_SPARKJOB_SERVER_URL=${TESTSJS_SPARKJOB_SERVER_URL:-http://localhost:8090}
 export TESTSJS_SPARK_TEST_CTX=${TESTSJS_SPARK_TEST_CTX:-functional}
 export TESTSJS_SPARKJOB_JAR_URL=${TESTSJS_SPARKJOB_JAR_URL:-http://localhost/job-server-tests_2.10-0.6.1-SNAPSHOT.jar}
 export TESTSJS_SPARKJOB_JARS_DIR=/tmp/testsjs_sparkjob_jars

@@ -34,17 +34,17 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         class_path = "spark.jobserver.VeryShortDoubleJob"
         job = self._create_job(test_app, class_path,
                                ctx=self._get_functional_context())
-        created_job = self.client.jobs.get(job.jobId)
-        self.assertEqual(job.jobId, created_job.jobId)
-        status = created_job.status
-        self.assertTrue(status == "RUNNING" or status == "FINIHSED")
-        self._wait_till_job_is_done(created_job)
+        time.sleep(3)
+        self.assertTrue(len(job.jobId) > 0)
+        self.assertTrue(job.status == "STARTED")
+        self._wait_till_job_is_done(job)
 
     def test_job_result(self):
         (app_name, test_app) = self._create_app()
         class_path = "spark.jobserver.VeryShortDoubleJob"
         job = self.client.jobs.create(test_app, class_path,
                                       ctx=self._get_functional_context())
+        time.sleep(3)
         self._wait_till_job_is_done(job)
         job = self.client.jobs.get(job.jobId)
         self.assertEqual("FINISHED", job.status)
@@ -57,6 +57,7 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         job = self._create_job(test_app, class_path,
                                conf=conf,
                                ctx=self._get_functional_context())
+        time.sleep(3)
         created_job = self.client.jobs.get(job.jobId)
         self.assertEqual(job.jobId, created_job.jobId)
         status = created_job.status
@@ -79,6 +80,7 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         job = self.client.jobs.create(test_app, class_path,
                                       conf=conf,
                                       ctx=self._get_functional_context())
+        time.sleep(3)
         resp = self.client.jobs.delete(job.jobId)
         self.assertEqual(200, resp.status_code)
         resp = resp.json()
@@ -93,6 +95,7 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         class_path = "spark.jobserver.VeryShortDoubleJob"
         job = self.client.jobs.create(test_app, class_path,
                                       ctx=self._get_functional_context())
+        time.sleep(3)
         self._wait_till_job_is_done(job)
         self.assertRaises(exceptions.NotFoundException,
                           self.client.jobs.delete, job.jobId)

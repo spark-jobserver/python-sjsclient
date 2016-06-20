@@ -56,7 +56,9 @@ class JobManager(base.ResourceManager):
             params['context'] = ctx.name
 
         resp = self.client._post(url, data=conf, params=params).json()
-        return self.get(resp['result']['jobId'])
+        result = {'status': resp['status']}
+        result.update(resp['result'])
+        return self._create_resource(result)
 
     def get(self, job_id):
         """Get a specific Job. This returns more information than create.
