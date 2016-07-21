@@ -4,6 +4,14 @@ from sjsclient import base
 from sjsclient import utils
 
 
+class JobStatus(object):
+    """A Helper class that contains the job status"""
+
+    RUNNING = "RUNNING"
+    FINISHED = "FINISHED"
+    ERROR = "ERROR"
+
+
 class Job(base.Resource):
     """A Spark job."""
 
