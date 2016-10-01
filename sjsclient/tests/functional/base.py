@@ -38,6 +38,11 @@ class TestFunctionalSJS(testtools.TestCase):
 
 def create_functional_context():
     client = _get_sjsclient()
+    try:
+        client.contexts.delete(test_ctx)
+    except exceptions.NotFoundException:
+        pass
+    time.sleep(5)
     client.contexts.create(test_ctx)
     time.sleep(2)
 
@@ -57,16 +62,5 @@ def _get_sjsclient():
     return client.Client(sjs_url, auth)
 
 
-def delete_all_contexts(sleep=10):
-    client = _get_sjsclient()
-    for ctx in client.contexts.list():
-        try:
-            client.contexts.delete(ctx.name)
-        except exceptions.NotFoundException:
-            pass
-    time.sleep(sleep)
-
-
 def bootstrap_testbed():
-    delete_all_contexts()
     create_functional_context()
