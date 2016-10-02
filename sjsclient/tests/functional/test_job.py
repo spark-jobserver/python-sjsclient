@@ -99,3 +99,17 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         self._wait_till_job_is_done(job)
         self.assertRaises(exceptions.NotFoundException,
                           self.client.jobs.delete, job.jobId)
+
+    def test_get_job_config(self):
+        (app_name, test_app) = self._create_app()
+        class_path = "spark.jobserver.VeryShortDoubleJob"
+        config = {"test_config": "test_config_value"}
+        job = self.client.jobs.create(test_app, class_path,
+                                      ctx=self._get_functional_context(),
+                                      conf=config)
+        time.sleep(3)
+        self._wait_till_job_is_done(job)
+        job = self.client.jobs.get(job.jobId)
+        job_config = job.get_config()
+        self.assertEqual("FINISHED", job.status)
+        self.assertEqual(config["test_config"], job_config["test_config"])

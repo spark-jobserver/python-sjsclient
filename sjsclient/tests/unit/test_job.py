@@ -74,6 +74,12 @@ job_delete_response = """
 }
 """
 
+job_config_response = """
+{
+   "test_config": "test_value"
+}
+"""
+
 job_repr = "<Job: %s>" % job_id
 
 
@@ -229,3 +235,18 @@ class TestJob(base.BaseTestCase):
         self.assertEqual(200, resp.status_code)
         resp = resp.json()
         self.assertEqual("KILLED", resp["status"])
+
+    @requests_mock.Mocker()
+    def test_get_config(self, mock_req):
+        config_url = utils.urljoin(self.TEST_ENDPOINT,
+                                   self.client.jobs.base_path,
+                                   job_id, "config")
+        get_url = utils.urljoin(self.TEST_ENDPOINT,
+                                self.client.jobs.base_path,
+                                job_id)
+        mock_req.get(get_url, text=job_get_result_response)
+        mock_req.get(config_url, text=job_config_response)
+        jobObj = self.client.jobs.get(job_id)
+        job_config = jobObj.get_config()
+        self.assertIsInstance(job_config, job.JobConfig)
+        self.assertEqual("test_value", job_config["test_config"])

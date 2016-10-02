@@ -36,6 +36,16 @@ class Job(base.Resource):
 
         return self.manager.delete(self.jobId)
 
+    def get_config(self):
+        """Get job configuration."""
+
+        return self.manager.get_config(self.jobId)
+
+
+class JobConfig(dict):
+    """A Spark job config dictionary."""
+    pass
+
 
 class JobManager(base.ResourceManager):
     """Manage :class:`Job` resources."""
@@ -88,3 +98,14 @@ class JobManager(base.ResourceManager):
         url = utils.urljoin(url, job_id)
         resp = self.client._delete(url)
         return resp
+
+    def get_config(self, job_id):
+        """Get job configuration.
+
+        :param job_id: The jobId of the :class:`Job` to get.
+        :rtype: :class:`JobConfig`
+        """
+
+        url = utils.urljoin(self.base_path, job_id, "config")
+        resp = self.client._get(url).json()
+        return JobConfig(resp)
