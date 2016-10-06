@@ -71,6 +71,13 @@ Listing jobs::
     99c8be9e-a0ec-42dd-8a2c-9a8680bc5051
     bb82f712-d4b4-43a4-8e4d-e4bb272e85db
 
+Limiting jobs list::
+
+    >>> for job in sjs.jobs.list(limit=1):
+    ...     print job.jobId
+    ...
+    8c5bd52f-6486-44ee-9ac3-a8327ee40494
+
 Creating a named context::
 
     >>> ctx_config = {'num-cpu-cores': '1', 'memory-per-node': '512m'}

@@ -11,9 +11,9 @@ class ResourceManager(object):
     def __init__(self, client):
         self.client = client
 
-    def list(self):
+    def list(self, **kwargs):
         url = self.base_path
-        resp = self.client._get(url).json()
+        resp = self.client._get(url, params=kwargs).json()
         for data in resp:
             yield self._create_resource(data)
 
