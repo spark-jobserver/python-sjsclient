@@ -13,5 +13,6 @@ install:
 script:
   - tox
   - tox -e cover
+  - tox -e pep8
 after_success:
   coveralls
