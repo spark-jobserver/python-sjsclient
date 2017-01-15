@@ -12,7 +12,6 @@ install:
   - pip install coveralls
 script:
   - tox
-  - tox -e docs
   - tox -e cover
 after_success:
   coveralls
