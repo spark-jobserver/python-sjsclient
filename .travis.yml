@@ -14,5 +14,6 @@ script:
   - tox
   - tox -e cover
   - tox -e pep8
+  - tox -e docs
 after_success:
   coveralls
