@@ -20,10 +20,8 @@ class_path = "test.class.path"
 job_create_response = """
 {
   "status": "%s",
-  "result": {
-    "jobId": "%s",
-    "context": "%s"
-  }
+  "jobId": "%s",
+  "context": "%s"
 }
 """ % (started, job_id, context)
 

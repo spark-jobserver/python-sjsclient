@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from sjsclient import base
 from sjsclient import utils
 
@@ -74,9 +73,7 @@ class JobManager(base.ResourceManager):
             params['context'] = ctx.name
 
         resp = self.client._post(url, data=conf, params=params).json()
-        result = {'status': resp['status']}
-        result.update(resp['result'])
-        return self._create_resource(result)
+        return self._create_resource(resp)
 
     def get(self, job_id):
         """Get a specific Job. This returns more information than create.
