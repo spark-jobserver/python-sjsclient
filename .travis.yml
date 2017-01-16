@@ -1,18 +1,19 @@
+sudo: false
 language: python
-python: 2.7
-env:
-  - TOX_ENV=py36
-  - TOX_ENV=py35
-  - TOX_ENV=py34
-  - TOX_ENV=py33
-  - TOX_ENV=py27
-  - TOX_ENV=docs
-  - TOX_ENV=pep8
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "pypy"
 install:
-  - pip install tox
+  - pip install tox-travis
   - pip install coveralls
 script:
-  - tox -e $TOX_ENV
+  - tox
   - tox -e cover
+  - tox -e pep8
+  - tox -e docs
 after_success:
   coveralls
