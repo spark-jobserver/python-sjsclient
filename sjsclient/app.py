@@ -5,6 +5,21 @@ from sjsclient import exceptions
 from sjsclient import utils
 
 
+class AppType(object):
+    """A helper class that contains app types"""
+
+    JAVA = "java"
+    PYTHON = "python"
+    _APP_TYPES_HEADER_MAP = {
+        JAVA: "application/java-archive",
+        PYTHON: "application/python-archive"
+    }
+
+    @staticmethod
+    def get_header(app_type):
+        return AppType._APP_TYPES_HEADER_MAP[app_type]
+
+
 class App(base.Resource):
     """An app is a spark application."""
 
@@ -20,21 +35,22 @@ class App(base.Resource):
 class AppManager(base.ResourceManager):
     """Manage :class:`App` resources."""
 
-    base_path = "jars"
+    base_path = "binaries"
     resource_class = App
 
-    def create(self, name, jar_blob):
+    def create(self, name, app_binary, app_type=AppType.JAVA):
         """Create an app.
 
         :param name: Descriptive name of application
-        :param jar_blob: Jar binary
+        :param app_binary: Application binary
+        :app_type: Application type, for example java or python, default: java
         :rtype: :class:`App`
         """
-
+        headers = {'Content-Type': AppType.get_header(app_type)}
         url = self.base_path
         url = utils.urljoin(url, name)
         # Strange that it is not JSON
-        self.client._post(url, data=jar_blob)
+        self.client._post(url, data=app_binary, headers=headers)
         return self.get(name)
 
     def get(self, name):
