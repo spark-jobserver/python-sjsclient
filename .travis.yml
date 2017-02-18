@@ -14,7 +14,7 @@ python:
   - "pypy"
 
 before_install:
-  - docker build -t sjsclient_ft -f ci/Dockerfile.test
+  - docker build -t sjsclient_ft -f ci/Dockerfile.test .
   - docker run -d sjsclient_ft /bin/sh -c "cd /root/spark-jobserver; ./start.sh;"
   - docker ps -a
   - docker run sjsclient_ft /bin/sh -c "cd /root/spark-jobserver; tox -e functional"  
