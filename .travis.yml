@@ -1,5 +1,10 @@
-sudo: false
+sudo: required
+
 language: python
+
+services:
+  - docker
+
 python:
   - "2.7"
   - "3.3"
@@ -7,6 +12,12 @@ python:
   - "3.5"
   - "3.6"
   - "pypy"
+
+before_install:
+  - docker build -t sjsclient_ft -f ci/Dockerfile.test
+  - docker run -d sjsclient_ft /bin/sh -c "cd /root/spark-jobserver; ./start.sh;"
+  - docker ps -a
+  - docker run sjsclient_ft /bin/sh -c "cd /root/spark-jobserver; tox -e functional"  
 install:
   - pip install tox-travis
   - pip install coveralls
