@@ -13,8 +13,8 @@ RUN echo 'deb http://dl.bintray.com/sbt/debian /' > /etc/apt/sources.list.d/sbt.
 # running sbt downloads some of its internals, speed up sebsequent sbt runs
 
 RUN pip install --upgrade pip && \
-    pip install py4j pyhoco tox && \
-    pip3 install pyhocon
+    pip install py4j pyhocon tox && \
+    pip3 install pyhocon py4j
 
 RUN mkdir ${SPARK_HOME} && \
     curl -L -o /tmp/spark.tgz http://d3kbcqa49mib13.cloudfront.net/spark-1.6.2-bin-hadoop2.6.tgz && \
