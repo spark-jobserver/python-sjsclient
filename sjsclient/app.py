@@ -43,7 +43,7 @@ class AppManager(base.ResourceManager):
 
         :param name: Descriptive name of application
         :param app_binary: Application binary
-        :app_type: Application type, for example java or python, default: java
+        :param app_type: App type, for example java or python, default: java
         :rtype: :class:`App`
         """
         headers = {'Content-Type': AppType.get_header(app_type)}
