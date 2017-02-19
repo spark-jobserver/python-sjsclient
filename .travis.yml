@@ -1,5 +1,10 @@
-sudo: false
+sudo: required
+
 language: python
+
+services:
+  - docker
+
 python:
   - "2.7"
   - "3.3"
@@ -7,6 +12,11 @@ python:
   - "3.5"
   - "3.6"
   - "pypy"
+
+before_install:
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker build -t sjsclient_ft -f ci/Dockerfile.test . ; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker run -d sjsclient_ft /bin/bash -c "cd /opt/spark-jobserver; ./start.sh;" ; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker ps -a ; fi
 install:
   - pip install tox-travis
   - pip install coveralls
@@ -15,5 +25,6 @@ script:
   - tox -e cover
   - tox -e pep8
   - tox -e docs
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker exec `docker ps --filter status=running --format "{{.ID}}"` /bin/bash -c "cd /opt/spark-jobserver; tox -e functional_py34" ; fi  
 after_success:
   coveralls
