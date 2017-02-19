@@ -2,7 +2,7 @@
 
 export TESTSJS_SPARKJOB_SERVER_URL=${TESTSJS_SPARKJOB_SERVER_URL:-http://localhost:8090}
 export TESTSJS_SPARK_TEST_CTX=${TESTSJS_SPARK_TEST_CTX:-python-sjsclient-ft}
-export TESTSJS_SPARKJOB_JAR_URL=${TESTSJS_SPARKJOB_JAR_URL:-$(find `pwd` -name job-server-tests*.jar)
+export TESTSJS_SPARKJOB_JAR_URL=${TESTSJS_SPARKJOB_JAR_URL:-$(find `pwd` -name job-server-tests*.jar)}
 export TESTSJS_SPARKJOB_JARS_DIR=/tmp/testsjs_sparkjob_jars
 export TESTSJS_SPARKJOB_SERVER_AUTH_ENABLED=${TESTSJS_SPARKJOB_SERVER_AUTH_ENABLED:-1}
 if [ $TESTSJS_SPARKJOB_SERVER_AUTH_ENABLED -eq 1 ]; then
