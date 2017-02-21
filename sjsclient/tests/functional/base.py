@@ -17,10 +17,13 @@ class TestFunctionalSJS(testtools.TestCase):
     def setUp(self):
         super(TestFunctionalSJS, self).setUp()
         self.client = _get_sjsclient()
-        jars_dir = os.getenv("TESTSJS_SPARKJOB_JARS_DIR")
+        artifact_dir = os.getenv("TESTSJS_SPARKJOB_ARTIFACT_DIR")
         jar_name = os.getenv("TESTSJS_SPARKJOB_JAR_URL").split('/')[-1]
-        jar_path = os.path.join(jars_dir, jar_name)
+        jar_path = os.path.join(artifact_dir, jar_name)
         self.jar_blob = open(jar_path, 'rb').read()
+        egg_name = os.getenv("TESTSJS_SPARKJOB_EGG_URL").split('/')[-1]
+        egg_path = os.path.join(artifact_dir, egg_name)
+        self.egg_blob = open(egg_path, 'rb').read()
 
     def _get_functional_context(self):
         return get_functional_context()
