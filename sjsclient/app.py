@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from sjsclient import base
 from sjsclient import exceptions
 from sjsclient import utils
@@ -51,6 +53,7 @@ class AppManager(base.ResourceManager):
         url = utils.urljoin(url, name)
         # Strange that it is not JSON
         self.client._post(url, data=app_binary, headers=headers)
+        time.sleep(1)
         return self.get(name)
 
     def get(self, name):
