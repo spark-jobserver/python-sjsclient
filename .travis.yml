@@ -15,8 +15,11 @@ python:
 
 before_install:
   - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker build -t sjsclient_ft -f ci/Dockerfile.test . ; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker run -d sjsclient_ft /bin/bash -c "cd /opt/spark-jobserver; ./start.sh;" ; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker run --name sjs_db -d sjsclient_ft /bin/bash -c "/opt/h2/bin/h2-server.sh;" ; fi
   - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker ps -a ; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker run --link sjs_db:db --name sjs -d sjsclient_ft /bin/bash -c "cd /opt/spark-jobserver; ./start.sh;" ; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker ps -a ; fi
+
 install:
   - pip install tox-travis
   - pip install coveralls
@@ -25,6 +28,6 @@ script:
   - tox -e cover
   - tox -e pep8
   - tox -e docs
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker exec `docker ps --filter status=running --format "{{.ID}}"` /bin/bash -c "cd /opt/spark-jobserver; tox -e functional_py34" ; fi  
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then docker exec sjs /bin/bash -c "cd /opt/spark-jobserver; tox -e functional_py34" ; fi
 after_success:
   coveralls
