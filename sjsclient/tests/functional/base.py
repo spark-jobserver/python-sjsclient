@@ -10,6 +10,7 @@ from sjsclient import client
 from sjsclient import exceptions
 
 test_ctx = os.getenv("TESTSJS_SPARK_TEST_CTX")
+test_py_ctx = "{}_py".format(test_ctx)
 
 
 class TestFunctionalSJS(testtools.TestCase):
@@ -26,7 +27,10 @@ class TestFunctionalSJS(testtools.TestCase):
         self.egg_blob = open(egg_path, 'rb').read()
 
     def _get_functional_context(self):
-        return get_functional_context()
+        return get_functional_context(test_ctx)
+
+    def _get_functional_py_context(self):
+        return get_functional_context(test_py_ctx)
 
     def _delete_ctx(self, name):
         self.client.contexts.delete(name)
@@ -39,20 +43,27 @@ class TestFunctionalSJS(testtools.TestCase):
                 found = False
 
 
-def create_functional_context():
+def create_functional_context(ctx, factory=None):
     client = _get_sjsclient()
     try:
-        client.contexts.delete(test_ctx)
+        client.contexts.delete(ctx)
     except exceptions.NotFoundException:
         pass
     time.sleep(5)
-    client.contexts.create(test_ctx)
+    if factory is None:
+        client.contexts.create(ctx)
+    else:
+        params = {
+            "context-factory": factory
+        }
+        client.contexts.create(ctx, params)
+
     time.sleep(2)
 
 
-def get_functional_context():
+def get_functional_context(ctx):
     client = _get_sjsclient()
-    return client.contexts.get(test_ctx)
+    return client.contexts.get(ctx)
 
 
 def _get_sjsclient():
@@ -66,4 +77,6 @@ def _get_sjsclient():
 
 
 def bootstrap_testbed():
-    create_functional_context()
+    create_functional_context(test_ctx)
+    py_factory = "spark.jobserver.python.PythonSparkContextFactory"
+    create_functional_context(test_py_ctx, py_factory)
