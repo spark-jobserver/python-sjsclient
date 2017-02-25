@@ -3,6 +3,7 @@ import sys
 import time
 import uuid
 
+from sjsclient import app
 from sjsclient import exceptions
 from sjsclient.tests.functional import base
 
@@ -16,6 +17,12 @@ class TestFunctionalJob(base.TestFunctionalSJS):
     def _create_app(self):
         app_name = str(uuid.uuid4())
         test_app = self.client.apps.create(app_name, self.jar_blob)
+        return (app_name, test_app)
+
+    def _create_py_app(self):
+        app_name = str(uuid.uuid4())
+        test_app = self.client.apps.create(app_name, self.egg_blob,
+                                           app.AppType.PYTHON)
         return (app_name, test_app)
 
     def _create_job(self, app, class_path, conf=None, ctx=None):
@@ -34,6 +41,17 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         class_path = "spark.jobserver.VeryShortDoubleJob"
         job = self._create_job(test_app, class_path,
                                ctx=self._get_functional_context())
+        time.sleep(3)
+        self.assertTrue(len(job.jobId) > 0)
+        self.assertTrue(job.status == "STARTED")
+        self._wait_till_job_is_done(job)
+
+    def test_py_job_create(self):
+        (app_name, test_app) = self._create_py_app()
+        class_path = "example_jobs.word_count.WordCountSparkJob"
+        conf = "input.strings = ['a', 'b', 'a', 'b']"
+        job = self._create_job(test_app, class_path, conf,
+                               ctx=self._get_functional_py_context())
         time.sleep(3)
         self.assertTrue(len(job.jobId) > 0)
         self.assertTrue(job.status == "STARTED")
