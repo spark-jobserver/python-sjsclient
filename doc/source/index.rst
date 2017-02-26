@@ -29,6 +29,13 @@ Uploading a jar to Spark Jobserver::
     >>> jar_blob = open(jar_file_path, 'rb').read()
     >>> app = sjs.apps.create("test_app", jar_blob)
 
+Uploading a python egg to Spark Jobserver::
+
+    >>> from sjsclient import app
+    >>> egg_file_path = os.path.join("path", "to", "egg")
+    >>> egg_blob = open(egg_file_path, 'rb').read()
+    >>> app = sjs.apps.create("test_python_app", egg_blob, app.AppType.PYTHON)
+
 Listing available apps::
 
     >>> for app in sjs.apps.list():
