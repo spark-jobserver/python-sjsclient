@@ -78,7 +78,7 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         self._wait_till_job_is_done(job)
         job = self.client.jobs.get(job.jobId)
         self.assertEqual("FINISHED", job.status)
-        self.assertEqual({"a": 2, "b": 2}, job.result)
+        self.assertEqual({"'a'": 2, "'b'": 2}, job.result)
 
     def test_job_result_with_conf(self):
         (app_name, test_app) = self._create_app()
