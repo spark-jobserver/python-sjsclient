@@ -68,6 +68,18 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         self.assertEqual("FINISHED", job.status)
         self.assertEqual([2, 4, 6], job.result)
 
+    def test_py_job_result(self):
+        (app_name, test_app) = self._create_py_app()
+        class_path = "example_jobs.word_count.WordCountSparkJob"
+        conf = "input.strings = ['a', 'b', 'a', 'b']"
+        job = self._create_job(test_app, class_path, conf,
+                               ctx=self._get_functional_py_context())
+        time.sleep(3)
+        self._wait_till_job_is_done(job)
+        job = self.client.jobs.get(job.jobId)
+        self.assertEqual("FINISHED", job.status)
+        self.assertEqual({"'a'": 2, "'b'": 2}, job.result)
+
     def test_job_result_with_conf(self):
         (app_name, test_app) = self._create_app()
         conf = "stress.test.longpijob.duration = 1"
