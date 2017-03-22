@@ -4,8 +4,6 @@ RUN git clone https://github.com/spark-jobserver/spark-jobserver /opt/spark-jobs
 
 WORKDIR /opt/spark-jobserver
 
-RUN  git checkout a087d7359b84d316dcaa1c90692bab150ff43e75
-
 COPY ci/application.conf /opt/spark-jobserver/job-server/src/main/resources/application.conf
 COPY ci/start.sh start.sh
 COPY ci/log4j-server.properties /opt/spark-jobserver/bin/log4j-server.properties
