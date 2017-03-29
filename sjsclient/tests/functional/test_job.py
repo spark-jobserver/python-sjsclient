@@ -80,6 +80,17 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         self.assertEqual("FINISHED", job.status)
         self.assertEqual({"'a'": 2, "'b'": 2}, job.result)
 
+    def test_java_job_result(self):
+        (app_name, test_app) = self._create_app()
+        class_path = "spark.jobserver.JavaHelloWorldJob"
+        job = self._create_job(test_app, class_path,
+                               ctx=self._get_functional_java_context())
+        time.sleep(3)
+        self._wait_till_job_is_done(job)
+        job = self.client.jobs.get(job.jobId)
+        self.assertEqual("FINISHED", job.status)
+        self.assertEqual("Hi!", job.result)
+
     def test_job_result_with_conf(self):
         (app_name, test_app) = self._create_app()
         conf = "stress.test.longpijob.duration = 1"
