@@ -11,6 +11,7 @@ from sjsclient import exceptions
 
 test_ctx = os.getenv("TESTSJS_SPARK_TEST_CTX")
 test_py_ctx = "{}_py".format(test_ctx)
+test_java_ctx = "{}_java".format(test_ctx)
 
 
 class TestFunctionalSJS(testtools.TestCase):
@@ -31,6 +32,9 @@ class TestFunctionalSJS(testtools.TestCase):
 
     def _get_functional_py_context(self):
         return get_functional_context(test_py_ctx)
+
+    def _get_functional_java_context(self):
+        return get_functional_context(test_java_ctx)
 
     def _delete_ctx(self, name):
         self.client.contexts.delete(name)
@@ -80,3 +84,5 @@ def bootstrap_testbed():
     create_functional_context(test_ctx)
     py_factory = "spark.jobserver.python.PythonSparkContextFactory"
     create_functional_context(test_py_ctx, py_factory)
+    java_factory = "spark.jobserver.context.JavaSparkContextFactory"
+    create_functional_context(test_java_ctx, java_factory)
