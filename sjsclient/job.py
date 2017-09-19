@@ -56,13 +56,14 @@ class JobManager(base.ResourceManager):
         job = self.resource_class(self, data)
         return job
 
-    def create(self, app, class_path, conf=None, ctx=None):
+    def create(self, app, class_path, conf=None, ctx=None, sync=False):
         """Create a Spark job.
 
         :param app: Instance of :class:`App`
         :param class_path: Main class path of spark job.
         :param conf: Configuration json
         :param ctx: Instance of :class:`Context`
+        :param sync: Set to `True` for synchronous job creation
         :rtype: :class:`Job`
         """
 
@@ -71,6 +72,9 @@ class JobManager(base.ResourceManager):
                   'classPath': class_path}
         if ctx:
             params['context'] = ctx.name
+
+        if sync:
+            params['sync'] = 'true'
 
         resp = self.client._post(url, data=conf, params=params).json()
         return self._create_resource(resp)

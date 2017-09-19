@@ -69,6 +69,12 @@ Creating an adhoc job::
     >>> print("Job Status: ", job.status)
     Job Status: STARTED
 
+Creating a synchronous adhoc job::
+
+    >>> job = sjs.jobs.create(test_app, class_path, conf=config, sync=True)
+    >>> print(job.result)
+    [2, 4, 6]
+
 Polling for job status::
 
     >>> job = sjs.jobs.create(...)

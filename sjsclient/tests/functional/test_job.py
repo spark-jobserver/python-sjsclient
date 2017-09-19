@@ -24,12 +24,13 @@ class TestFunctionalJob(base.TestFunctionalSJS):
                                            app.AppType.PYTHON)
         return test_app
 
-    def _create_job(self, sjs_app, class_path, conf=None, ctx=None):
+    def _create_job(self, sjs_app, class_path, conf=None, ctx=None,
+                    sync=False):
         job = None
         while not job:
             try:
                 job = self.client.jobs.create(sjs_app, class_path,
-                                              conf=conf, ctx=ctx)
+                                              conf=conf, ctx=ctx, sync=sync)
             except exceptions.HttpException as exc:
                 if "NO SLOTS AVAILABLE" in str(exc):
                     raise
@@ -113,6 +114,15 @@ class TestFunctionalJob(base.TestFunctionalSJS):
         self.assertEqual("FINISHED", job.status)
         sys.stderr.write("duration %s" % job.duration)
         self.assertTrue("1." in job.duration)
+
+    def test_job_create_with_sync(self):
+        """Test synchronous job creation"""
+        test_app = self._create_app()
+        class_path = "spark.jobserver.VeryShortDoubleJob"
+        job = self._create_job(test_app, class_path,
+                               ctx=self._get_functional_context(),
+                               sync=True)
+        self.assertEqual([2, 4, 6], job.result)
 
     def _wait_till_job_is_done(self, job):
         while job.status != "FINISHED":
