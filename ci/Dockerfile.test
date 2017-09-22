@@ -3,6 +3,7 @@ FROM noorul/python-sjsclient-ft
 RUN git clone https://github.com/spark-jobserver/spark-jobserver /opt/spark-jobserver
 
 WORKDIR /opt/spark-jobserver
+RUN git checkout 8e2f459
 
 COPY ci/application.conf /opt/spark-jobserver/job-server/src/main/resources/application.conf
 COPY ci/start.sh start.sh
