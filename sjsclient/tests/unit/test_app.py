@@ -77,3 +77,12 @@ class TestApp(base.BaseTestCase):
         app_list = self.client.apps.list()
         for tapp in app_list:
             self.assertAppFields(tapp)
+
+    @requests_mock.Mocker()
+    def test_delete(self, mock_req):
+        get_url = utils.urljoin(self.TEST_ENDPOINT,
+                                self.client.apps.base_path,
+                                app_name)
+
+        mock_req.delete(get_url, text=app_create_response)
+        self.client.apps.delete(app_name)

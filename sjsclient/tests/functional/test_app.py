@@ -5,6 +5,7 @@ from sjsclient import exceptions
 
 from sjsclient.tests.functional import base
 
+import time
 import uuid
 
 
@@ -20,6 +21,16 @@ class TestFunctionalApp(base.TestFunctionalSJS):
         test_app = self.client.apps.create(app_name, self.egg_blob,
                                            app_type=app.AppType.PYTHON)
         return (app_name, test_app)
+
+    def _delete_app(self, name):
+        self.client.apps.delete(name)
+        found = True
+        while found:
+            try:
+                time.sleep(2)
+                self.client.apps.get(name)
+            except exceptions.NotFoundException:
+                found = False
 
     def test_list(self):
         (app_name1, test_app1) = self._create_java_app()
@@ -47,3 +58,9 @@ class TestFunctionalApp(base.TestFunctionalSJS):
     def test_get_non_existing_app(self):
         self.assertRaises(exceptions.NotFoundException,
                           self.client.apps.get, 'does-not-exist')
+
+    def test_delete_app(self):
+        (app_name, test_app) = self._create_java_app()
+        self._delete_app(app_name)
+        self.assertRaises(exceptions.NotFoundException,
+                          self.client.apps.get, app_name)

@@ -56,6 +56,17 @@ class AppManager(base.ResourceManager):
         time.sleep(1)
         return self.get(name)
 
+    def delete(self, name):
+        """Delete a specific App.
+
+        :param name: The name of the :class:`App` to delete.
+        """
+
+        url = self.base_path
+        url = utils.urljoin(url, name)
+        resp = self.client._delete(url)
+        return resp
+
     def get(self, name):
         """Get a specific App.
 
