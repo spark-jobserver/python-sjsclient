@@ -1,4 +1,4 @@
-FROM noorul/python-sjsclient-ft
+FROM noorul/python-sjsclient-ft:spark-1.6.2
 
 RUN git clone https://github.com/spark-jobserver/spark-jobserver /opt/spark-jobserver
 
