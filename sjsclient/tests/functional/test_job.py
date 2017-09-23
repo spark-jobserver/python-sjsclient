@@ -49,9 +49,8 @@ class TestFunctionalJob(base.TestFunctionalSJS):
 
     def test_py_job_create(self):
         """Test python job creation"""
-        self.skipTest("Python context creation is failing")
         test_app = self._create_py_app()
-        class_path = "example_jobs.word_count.WordCountSparkJob"
+        class_path = "example_jobs.word_count.WordCountSparkSessionJob"
         conf = "input.strings = ['a', 'b', 'a', 'b']"
         job = self._create_job(test_app, class_path, conf,
                                ctx=self._get_functional_py_context())
@@ -74,9 +73,8 @@ class TestFunctionalJob(base.TestFunctionalSJS):
 
     def test_py_job_result(self):
         """Test python job result"""
-        self.skipTest("Python context creation is failing")
         test_app = self._create_py_app()
-        class_path = "example_jobs.word_count.WordCountSparkJob"
+        class_path = "example_jobs.word_count.WordCountSparkSessionJob"
         conf = "input.strings = ['a', 'b', 'a', 'b']"
         job = self._create_job(test_app, class_path, conf,
                                ctx=self._get_functional_py_context())
