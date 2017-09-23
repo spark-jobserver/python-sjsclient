@@ -16,6 +16,7 @@ finished = "FINISHED"
 running = "RUNNING"
 context = "test-context"
 class_path = "test.class.path"
+result = "[1, 2, 3]"
 
 job_create_response = """
 {
@@ -25,6 +26,13 @@ job_create_response = """
 }
 """ % (started, job_id, context)
 
+job_create_with_sync_response = """
+{
+  "jobId": "%s",
+  "result": %s
+}
+""" % (job_id, result)
+
 job_get_result_response = """
 {
   "duration": "%s",
@@ -33,9 +41,9 @@ job_get_result_response = """
   "context": "%s",
   "status": "%s",
   "jobId": "%s",
-  "result": [1, 2, 3]
+  "result": %s
 }
-""" % (duration, class_path, start_time, context, finished, job_id)
+""" % (duration, class_path, start_time, context, finished, job_id, result)
 
 job_get_status_not_found_response = """
 {
@@ -165,6 +173,20 @@ class TestJob(base.BaseTestCase):
         mock_req.get(get_url, text=job_get_result_response)
         test_job_result = self.client.jobs.get(test_job.jobId)
         self.assertEqual(finished, test_job_result.status)
+        self.assertEqual([1, 2, 3], test_job_result.result)
+
+    @requests_mock.Mocker()
+    def test_create_with_sync(self, mock_req):
+        post_url = utils.urljoin(self.TEST_ENDPOINT,
+                                 self.client.jobs.base_path)
+        query = "?classPath=test.class.path&appName=test_app"
+        post_url = "{}{}".format(post_url, query)
+
+        mock_req.post(post_url, text=job_create_with_sync_response)
+
+        test_job_result = self.client.jobs.create(FakeApp, "test.class.path",
+                                                  sync=True)
+        self.assertEqual(job_id, test_job_result.jobId)
         self.assertEqual([1, 2, 3], test_job_result.result)
 
     @requests_mock.Mocker()
