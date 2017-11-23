@@ -82,7 +82,7 @@ def _get_sjsclient():
 
 def bootstrap_testbed():
     create_functional_context(test_ctx)
-    # py_factory = "spark.jobserver.python.PythonSparkContextFactory"
-    # create_functional_context(test_py_ctx, py_factory)
+    py_factory = "spark.jobserver.python.PythonSessionContextFactory"
+    create_functional_context(test_py_ctx, py_factory)
     java_factory = "spark.jobserver.context.JavaSparkContextFactory"
     create_functional_context(test_java_ctx, java_factory)

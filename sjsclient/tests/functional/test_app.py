@@ -45,7 +45,6 @@ class TestFunctionalApp(base.TestFunctionalSJS):
         self.assertIsNotNone(test_app.time)
 
     def test_create_python_app(self):
-        self.skipTest("Python context creation is failing")
         (app_name, test_app) = self._create_python_app()
         self.assertEqual(test_app.name, app_name)
         self.assertIsNotNone(test_app.time)
