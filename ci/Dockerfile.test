@@ -2,7 +2,7 @@ FROM noorul/python-sjsclient-ft
 
 RUN git clone https://github.com/spark-jobserver/spark-jobserver /opt/spark-jobserver
 RUN git -C /opt/spark-jobserver checkout -b ecandreev-remove_contexts_hash master
-RUN git -C /opt/spark-jobserver pull https://github.com/ecandreev/spark-jobserver.git remove_contexts_hash
+RUN git -C /opt/spark-jobserver pull --no-edit https://github.com/ecandreev/spark-jobserver.git remove_contexts_hash
 
 WORKDIR /opt/spark-jobserver
 
