@@ -9,10 +9,10 @@ import requests_mock
 from sjsclient import client
 from sjsclient import exceptions
 
-fake_response = 'this is a fake response...'
-fake_request = 'this is a fake request...'
+fake_response = "this is a fake response..."
+fake_request = "this is a fake request..."
 fake_record = {
-    'hello': 'world',
+    "hello": "world",
 }
 
 
@@ -26,9 +26,9 @@ class FakeRespone(object):
 
 class TestClient(base.BaseTestCase):
 
-    TEST_PATH = '/resources'
-    TEST_URL = 'http://example.com:8090/resources'
-    TEST_ENDPOINT = 'http://example.com:8090'
+    TEST_PATH = "/resources"
+    TEST_URL = "http://example.com:8090/resources"
+    TEST_ENDPOINT = "http://example.com:8090"
 
     def test_parse_error_response(self):
         http_client = client.Client(self.TEST_URL)
@@ -70,7 +70,7 @@ class TestClient(base.BaseTestCase):
 
         self.assertEqual("POST", mock_req.last_request.method)
         self.assertEqual(json.dumps(fake_record),
-                         mock_req.last_request.body,)
+                         mock_req.last_request.body.decode("utf-8"))
         self.assertResponseOK(resp, body=fake_response)
 
     @requests_mock.Mocker()
