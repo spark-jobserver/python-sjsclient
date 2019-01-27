@@ -26,3 +26,5 @@ script:
   - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then ci/run_ft_in_docker.sh ; fi
 after_success:
   coveralls
+after_failure:
+  docker logs sjs || true
