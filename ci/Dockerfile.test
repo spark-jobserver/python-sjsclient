@@ -1,6 +1,7 @@
 FROM noorul/python-sjsclient-ft
 
 RUN git clone https://github.com/spark-jobserver/spark-jobserver /opt/spark-jobserver
+RUN git -C /opt/spark-jobserver checkout v0.9.0
 
 WORKDIR /opt/spark-jobserver
 
