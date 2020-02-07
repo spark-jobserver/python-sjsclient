@@ -7,13 +7,13 @@ services:
 
 python:
   - "2.7"
-  - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
   - "pypy"
 
 before_install:
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then ci/deploy_sjs.sh ; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.7 ]]; then ci/deploy_sjs.sh ; fi
 
 install:
   - pip install tox-travis
@@ -23,7 +23,7 @@ script:
   - tox -e cover
   - tox -e pep8
   - tox -e docs
-  - if [[ $TRAVIS_PYTHON_VERSION == 3.4 ]]; then ci/run_ft_in_docker.sh ; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.7 ]]; then ci/run_ft_in_docker.sh ; fi
 after_success:
   coveralls
 after_failure:
